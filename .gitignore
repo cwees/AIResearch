@@ -1,1 +1,13 @@
-*.csv
+bard.csv 
+chatgpt.csv 
+copilot.csv 
+elevenlabs.csv 
+githubcopilot.csv
+googlebard.csv 
+gpt.csv 
+gpt3.csv 
+gpt4.csv 
+jasper.csv 
+midjourney.csv 
+openai.csv 
+stablediffusion.csv
