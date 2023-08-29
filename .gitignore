@@ -11,4 +11,4 @@ jasper.csv
 midjourney.csv 
 openai.csv 
 stablediffusion.csv
-/__pycache__
+__pycache__/
