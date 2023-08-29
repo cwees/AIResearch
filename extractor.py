@@ -1,6 +1,7 @@
 import copy
 import csv
 import os.path
+import json
 
 
 def processFile(file):
@@ -32,16 +33,17 @@ def processFile(file):
             count = count + 1
             if count % 100 == 0:
                 print("Processing row #", count)
-            jsonColumnData = eval(
-                (row[5])
-                .replace("'", '''"''')
-                .replace("“", '"')
-                .replace("”", '"')
-                .replace("‘", "'")
-                .replace("’", "'")
-                .replace("—", "-")
-                .replace("❤", "")
-                .replace("◌️", "'")
+            jsonRaw = (row[5]).replace("'", '''"''').replace("/", "//")
+            print(jsonRaw)
+            jsonColumnData = json.loads(
+                jsonRaw
+                # .replace("“", '"')
+                # .replace("”", '"')
+                # .replace("‘", "'")
+                # .replace("’", "'")
+                # .replace("—", "-")
+                # .replace("❤", "")
+                # .replace("◌️", "'")
             )
             baseList = [
                 row[10],  # from user
