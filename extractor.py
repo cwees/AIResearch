@@ -34,6 +34,7 @@ def processFile(file):
                 print("Processing row #", count)
             jsonColumnData = eval(
                 (row[5])
+                .strip("")
                 .replace("'", '''"''')
                 .replace("“", '"')
                 .replace("”", '"')
@@ -55,44 +56,60 @@ def processFile(file):
                 row[14],  # verification
                 row[0],  # user id
             ]
-            # user
-            if "mentions" in jsonColumnData.keys():
-                for eachUserMentioned in jsonColumnData["mentions"]:
+
+            for key in jsonColumnData.keys():
+                if key == "username":
                     mentionList = copy.deepcopy(baseList)
-                    mentionList.append(eachUserMentioned.get("username"))
+                    mentionList.append(key.get("username"))
                     userOutput.append(mentionList)
-
-            # urls
-            if "urls" in jsonColumnData.keys():
-                for eachUrlMentioned in jsonColumnData["urls"]:
+                if key == "unwound_urls":
                     urlList = copy.deepcopy(baseList)
-                    urlList.append(eachUrlMentioned.get("unwound_url"))
+                    urlList.append(key.get("unwound_url"))
                     urlOutput.append(urlList)
-
-            # hashtags
-            if "hashtags" in jsonColumnData.keys():
-                for eachHashtagMentioned in jsonColumnData["urls"]:
+                if key == "tag":
                     hashtagList = copy.deepcopy(baseList)
-                    hashtagList.append(eachHashtagMentioned.get("unwound_url"))
+                    hashtagList.append(key.get("tag"))
                     hashtagOutput.append(hashtagList)
 
-    csv_input_file.close()
+            # # user
+            # if "mentions" in jsonColumnData.keys():
+            #     for eachUserMentioned in jsonColumnData["mentions"]:
+            #         mentionList = copy.deepcopy(baseList)
+            #         mentionList.append(eachUserMentioned.get("username"))
+            #         userOutput.append(mentionList)
+
+            # # urls
+            # if "urls" in jsonColumnData.keys():
+            #     for eachUrlMentioned in jsonColumnData["urls"]:
+            #         urlList = copy.deepcopy(baseList)
+            #         urlList.append(eachUrlMentioned.get("unwound_url"))
+            #         urlOutput.append(urlList)
+
+            # # hashtags
+            # if "hashtags" in jsonColumnData.keys():
+            #     for eachHashtagMentioned in jsonColumnData["hashtags"]:
+            #         hashtagList = copy.deepcopy(baseList)
+            #         hashtagList.append(eachHashtagMentioned.get("tag"))
+            #         hashtagOutput.append(hashtagList)
 
     baseFileName = os.path.splitext(file)[0]
 
     with open(baseFileName + "hashtag.csv", "w") as csvfile:
         # creating a csv writer object
         csvwriter = csv.writer(csvfile)
+        csvwriter.writerow(copy.deepcopy(items).append("hashtag"))
         csvwriter.writerows(hashtagOutput)
 
     with open(baseFileName + "url.csv", "w") as csvfile:
         # creating a csv writer object
         csvwriter = csv.writer(csvfile)
+        csvwriter.writerow(copy.deepcopy(items).append("url"))
         csvwriter.writerows(urlOutput)
 
     with open(baseFileName + "user.csv", "w") as csvfile:
         # creating a csv writer object
         csvwriter = csv.writer(csvfile)
+        csvwriter.writerow(copy.deepcopy(items).append("user"))
         csvwriter.writerows(userOutput)
 
 
