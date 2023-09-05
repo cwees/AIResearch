@@ -37,8 +37,8 @@ def processFile(file):
             print(jsonRaw)
             jsonColumnData = json.loads(
                 jsonRaw
-                # .replace("“", '"')
-                # .replace("”", '"')
+                .replace("“", '"')
+                .replace("”", '"')
                 # .replace("‘", "'")
                 # .replace("’", "'")
                 # .replace("—", "-")
