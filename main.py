@@ -7,9 +7,8 @@ from networkExtractor import processFile
 
 def main():
     input = os.getcwd() + "\input\\"
-    output = os.getcwd() + "\output\\"
     for file in os.listdir(input):
         processFile(input + file)
-
+    print("finished processing all csv files!")
 
 main()
