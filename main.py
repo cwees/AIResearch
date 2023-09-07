@@ -7,9 +7,18 @@ from networkExtractor import processFile
 
 def main():
     input = os.getcwd() + "\input\\"
+    missed = 0
+    total = 0
     for file in os.listdir(input):
-        processFile(input + file)
-    print()
-    print("finished processing all csv files!")
+        miss, tot = processFile(input + file)
+        total = total + tot
+        missed = miss + missed
+    print("Finished processing all csv files.")
+    print("There were",total,"total data points processed")
+    print(
+        missed,
+        "data points were not processed since they were incomplete",
+    )
+
 
 main()

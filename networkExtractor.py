@@ -7,7 +7,9 @@ import os
 
 
 def processFile(inputFilename):
+    # initalize counts
     count = 0
+    total = 0
     # initialize lists for output to write to csv
     hashtagOutput = []
     urlOutput = []
@@ -20,18 +22,20 @@ def processFile(inputFilename):
         csvFileAsList = csv.reader(inputCSV, skipinitialspace=True)
         next(csvFileAsList)  # skip first row of headers
         for row in csvFileAsList:
+            total = total + 1
+            # removes incomplete data points
+            if len(row) < 15:
+                continue
+            # removes data without entity dictionary
+            if row[5] == "No Entities":
+                continue
             count = count + 1
 
             # print every 500 rows
             if count % 500 == 0:
                 print("Processing " + baseFileName + ".csv, row", count)
 
-            # removes incomplete data
-            if len(row) < 15:
-                continue
-            # removes data without relational dictionary
-            if row[5] == "No Entities":
-                continue
+            # shared info
             baseList = [
                 row[10],  # from user
                 row[1],  # text
@@ -57,14 +61,14 @@ def processFile(inputFilename):
                     userList.append(eachUser["username"])
                     userOutput.append(userList)
 
-                # hashtag
+            # hashtag
             if columnData.get("hashtags") != None:
                 for eachHashtag in columnData["hashtags"]:
                     hashtagList = copy.deepcopy(baseList)
                     hashtagList.append(eachHashtag["tag"])
                     hashtagOutput.append(hashtagList)
 
-                # urls
+            # urls
             if columnData.get("urls") != None:
                 for eachUrl in columnData["urls"]:
                     urlList = copy.deepcopy(baseList)
@@ -77,9 +81,10 @@ def processFile(inputFilename):
     if not os.path.exists(outputFolder):
         print("creating output directory")
         os.makedirs(outputFolder)
-    print()
-    print("Writing ", count, " rows of data from", baseFileName, " to csv")
 
+    print()
+    print("writing", count, "rows of data from", baseFileName, "to csv.")
+    print()
     # writing to user x hashtag csv file
     with open(
         outputFolder + baseFileName + "hashtag.csv",
@@ -104,6 +109,7 @@ def processFile(inputFilename):
             ]
         )
         hashtagWriter.writerows(hashtagOutput)
+
     # writing user x url csv file
     with open(
         outputFolder + baseFileName + "url.csv",
@@ -128,6 +134,7 @@ def processFile(inputFilename):
             ]
         )
         urlWriter.writerows(urlOutput)
+
     # writing user x user csv file
     with open(
         outputFolder + baseFileName + "user.csv",
@@ -152,3 +159,4 @@ def processFile(inputFilename):
             ]
         )
         userCsvWriter.writerows(userOutput)
+    return total-count, count
