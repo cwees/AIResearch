@@ -9,6 +9,7 @@ def main():
     input = os.getcwd() + "\input\\"
     for file in os.listdir(input):
         processFile(input + file)
+    print()
     print("finished processing all csv files!")
 
 main()

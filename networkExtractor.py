@@ -12,7 +12,7 @@ def processFile(inputFilename):
     hashtagOutput = []
     urlOutput = []
     userOutput = []
-    
+
     # get base file name
     baseFileName = os.path.splitext(inputFilename)[0].split("\\")[-1]
     # open file and read
@@ -79,7 +79,6 @@ def processFile(inputFilename):
         os.makedirs(outputFolder)
     print()
     print("Writing ", count, " rows of data from", baseFileName, " to csv")
-    print()
 
     # writing to user x hashtag csv file
     with open(
