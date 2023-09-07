@@ -2,7 +2,7 @@ import copy
 import csv
 import os.path
 import json
-
+import ast
 
 def processFile(file):
     count = 0
@@ -17,7 +17,6 @@ def processFile(file):
         "location",
         "user_verification",
         "user_id",
-        "hashtag",
     ]
 
     # initialize lists for output to write to csv
@@ -100,20 +99,23 @@ def processFile(file):
         csvwriter = csv.writer(csvfile)
         csvwriter.writerow(copy.deepcopy(items).append("hashtag"))
         csvwriter.writerows(hashtagOutput)
+        csvwriter.close()
 
     with open(baseFileName + "url.csv", "w") as csvfile:
         # creating a csv writer object
         csvwriter = csv.writer(csvfile)
         csvwriter.writerow(copy.deepcopy(items).append("url"))
         csvwriter.writerows(urlOutput)
+        csvwriter.close()
 
     with open(baseFileName + "user.csv", "w") as csvfile:
         # creating a csv writer object
         csvwriter = csv.writer(csvfile)
         csvwriter.writerow(copy.deepcopy(items).append("user"))
         csvwriter.writerows(userOutput)
+        csvwriter.close()
 
-
+    csv_input_file.close()
 # def processHashtags():
 #     list = []
 #     return list

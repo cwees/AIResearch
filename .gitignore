@@ -13,3 +13,4 @@ openai.csv
 stablediffusion.csv
 __pycache__/
 .vscode/
+output/

@@ -13,7 +13,7 @@
 import csv
 
 
-def main():
+def process(input_filename):
     # counter to keep track of the rows processed
     count = 0
 
@@ -21,7 +21,6 @@ def main():
     CSV_output_list = []
 
     # variable that hold the file name
-    input_filename = "bard.csv"
 
     # open the input file and read it
     with open(input_filename, newline="", encoding="utf-8") as csv_input_file:
@@ -30,9 +29,8 @@ def main():
         # process each ron in the input file
         for row in CSV_file_as_list:
             count = count + 1
-            print()
-            print("Processing row#", count)
-            print()
+            if count % 50 == 0:
+                print("Processing row #", count)
 
             id_str = row[0]
             from_user = row[10]
@@ -109,4 +107,4 @@ def main():
     csv_input_file.close()
 
 
-main()
+process("bard.csv")
