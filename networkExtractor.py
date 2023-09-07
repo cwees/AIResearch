@@ -5,23 +5,24 @@ import csv
 import os
 
 
-def process(inputFilename):
+def processFile(inputFilename):
     count = 0
     # initialize lists for output to write to csv
     hashtagOutput = []
     urlOutput = []
     userOutput = []
-
+    baseFileName = os.path.splitext(inputFilename)[0]
     # open file and read
     with open(inputFilename, newline="", encoding="utf-8") as inputCSV:
         csvFileAsList = csv.reader(inputCSV, skipinitialspace=True)
         next(csvFileAsList)  # skip first row of headers
         for row in csvFileAsList:
             count = count + 1
-            if count % 1000 == 0:
-                print("Processing "+inputFilename+", row #", count)
-                print()
-
+            if count % 250 == 0:
+                print("Processing " + baseFileName + ".csv, row #", count)
+            # if count > 8128:
+            #     print(count)
+            #     print(row)
             baseList = [
                 row[10],  # from user
                 row[1],  # text
@@ -58,8 +59,11 @@ def process(inputFilename):
                         urlOutput.append(urlList)
     inputCSV.close()
 
-    baseFileName = os.path.splitext(inputFilename)[0]
-
+    # if output folder does not exist, create it
+    outputFolder = os.getcwd() + "\output\\"
+    if not os.path.exists(outputFolder):
+        os.makedirs(outputFolder)
+    # write to csv
     with open(
         os.getcwd() + "\output\\" + baseFileName + "hashtag.csv",
         "w",
@@ -135,5 +139,3 @@ def process(inputFilename):
         )
         userCsvWriter.writerows(userOutput)
 
-
-process("bard.csv")

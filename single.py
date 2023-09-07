@@ -6,10 +6,8 @@ from networkExtractor import processFile
 
 
 def main():
-    input = os.getcwd() + "\input\\"
-    output = os.getcwd() + "\output\\"
-    for file in os.listdir(input):
-        processFile(input + file)
+    input = os.getcwd() + "\input\\" + "bard.csv"
+    processFile(input)
 
 
 main()
