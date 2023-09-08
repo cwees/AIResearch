@@ -17,7 +17,7 @@ def main():
     print("There were", total, "total data points processed")
     print(
         missed,
-        "data points were not processed since they were incomplete",
+        "incomplete data points were not processed",
     )
 
 
