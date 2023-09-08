@@ -159,4 +159,4 @@ def processFile(inputFilename):
             ]
         )
         userCsvWriter.writerows(userOutput)
-    return total-count, count
+    return total - count, count
