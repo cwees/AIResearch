@@ -87,6 +87,7 @@ def process_file(input_file_name):
         os.makedirs(output_folder)
 
     print("------------------------------------")
+
     print(
         "writing",
         data_count,

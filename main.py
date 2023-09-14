@@ -15,7 +15,8 @@ def main():
         total = total + tot
         missed = miss + missed
         rows = data + rows
-        print("------------------------------------------------------------")
+
+        print("------------------------------------------------")
 
     print("Finished processing all csv files.")
     print(
