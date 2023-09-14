@@ -2,19 +2,21 @@
 # By: Chris He, Samer Al-Khateeb
 
 import os
-from networkExtractor import processFile
+from networkExtractor import process_file
 
 
 def main():
     input = os.getcwd() + "\input\\"
     missed = 0
     total = 0
+    rows = 0
     for file in os.listdir(input):
-        miss, tot = processFile(input + file)
+        miss, tot, data = process_file(input + file)
         total = total + tot
         missed = miss + missed
+        rows = data + rows
     print("Finished processing all csv files.")
-    print("There were", total, "total data points processed")
+    print("There were", total, "total data points processed with", rows, "rows of data written")
     print(
         missed,
         "incomplete data points were not processed",

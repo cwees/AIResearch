@@ -6,22 +6,23 @@ import csv
 import os
 
 
-def processFile(inputFilename):
+def process_file(input_file_name):
     # initalize counts
     count = 0
     total = 0
+    data_count = 0
     # initialize lists for output to write to csv
-    hashtagOutput = []
-    urlOutput = []
-    userOutput = []
+    hashtag_output = []
+    url_output = []
+    user_output = []
 
     # get base file name
-    baseFileName = os.path.splitext(inputFilename)[0].split("\\")[-1]
+    base_file_name = os.path.splitext(input_file_name)[0].split("\\")[-1]
     # open file and read
-    with open(inputFilename, newline="", encoding="utf-8") as inputCSV:
-        csvFileAsList = csv.reader(inputCSV, skipinitialspace=True)
-        next(csvFileAsList)  # skip first row of headers
-        for row in csvFileAsList:
+    with open(input_file_name, newline="", encoding="utf-8") as input_csv:
+        csv_file_as_list = csv.reader(input_csv, skipinitialspace=True)
+        next(csv_file_as_list)  # skip first row of headers
+        for row in csv_file_as_list:
             total = total + 1
             # removes incomplete data points
             if len(row) < 15:
@@ -33,10 +34,10 @@ def processFile(inputFilename):
 
             # print every 500 rows
             if count % 500 == 0:
-                print("Processing " + baseFileName + ".csv, row", count)
+                print("Processing " + base_file_name + ".csv, row", count)
 
             # shared info
-            baseList = [
+            base_list = [
                 row[10],  # from user
                 row[1],  # text
                 row[2],  # relationship type
@@ -50,50 +51,61 @@ def processFile(inputFilename):
             ]
 
             # strip string of " and convert to dictionary
-            columnData = eval(row[5].strip('"'))
+            column_data = eval(row[5].strip('"'))
 
             # process entities dictionary
 
             # useruser
-            if columnData.get("mentions") != None:
-                for eachUser in columnData["mentions"]:
-                    userList = copy.deepcopy(baseList)
-                    userList.append(eachUser["username"])
-                    userOutput.append(userList)
+            if column_data.get("mentions") != None:
+                for each_user in column_data["mentions"]:
+                    user_list = copy.deepcopy(base_list)
+                    user_list.append(each_user["username"])
+                    user_output.append(user_list)
+                    data_count = data_count + 1
 
             # hashtag
-            if columnData.get("hashtags") != None:
-                for eachHashtag in columnData["hashtags"]:
-                    hashtagList = copy.deepcopy(baseList)
-                    hashtagList.append(eachHashtag["tag"])
-                    hashtagOutput.append(hashtagList)
+            if column_data.get("hashtags") != None:
+                for each_hashtag in column_data["hashtags"]:
+                    hashtag_list = copy.deepcopy(base_list)
+                    hashtag_list.append(each_hashtag["tag"])
+                    hashtag_output.append(hashtag_list)
+                    data_count = data_count + 1
 
             # urls
-            if columnData.get("urls") != None:
-                for eachUrl in columnData["urls"]:
-                    urlList = copy.deepcopy(baseList)
-                    urlList.append(eachUrl["expanded_url"])
-                    urlOutput.append(urlList)
-    inputCSV.close()
+            if column_data.get("urls") != None:
+                for each_url in column_data["urls"]:
+                    url_list = copy.deepcopy(base_list)
+                    url_list.append(each_url["expanded_url"])
+                    url_output.append(url_list)
+                    data_count = data_count + 1
+    input_csv.close()
 
     # if output folder does not exist, create it
-    outputFolder = os.getcwd() + "\output\\"
-    if not os.path.exists(outputFolder):
+    output_folder = os.getcwd() + "\output\\"
+    if not os.path.exists(output_folder):
         print("creating output directory")
-        os.makedirs(outputFolder)
+        os.makedirs(output_folder)
 
     print()
-    print("writing", count, "rows of data from", baseFileName, "to csv.")
+    print(
+        "writing",
+        data_count,
+        "rows of data from",
+        count,
+        "data points from",
+        base_file_name,
+        "to csv.",
+    )
     print()
     # writing to user x hashtag csv file
     with open(
-        outputFolder + baseFileName + "hashtag.csv",
+        output_folder + base_file_name + "hashtag.csv",
         "w",
         newline="",
         encoding="utf-8",
-    ) as csvHashtagFile:
-        hashtagWriter = csv.writer(csvHashtagFile)
-        hashtagWriter.writerow(
+    ) as csv_hashtag_file:
+        hashtag_writer = csv.writer(csv_hashtag_file)
+        hashtag_writer.writerow(
             [
                 "source",
                 "text",
@@ -108,17 +120,17 @@ def processFile(inputFilename):
                 "hashtag",
             ]
         )
-        hashtagWriter.writerows(hashtagOutput)
+        hashtag_writer.writerows(hashtag_output)
 
     # writing user x url csv file
     with open(
-        outputFolder + baseFileName + "url.csv",
+        output_folder + base_file_name + "url.csv",
         "w",
         newline="",
         encoding="utf-8",
-    ) as csvUrlFile:
-        urlWriter = csv.writer(csvUrlFile)
-        urlWriter.writerow(
+    ) as csv_url_file:
+        url_writer = csv.writer(csv_url_file)
+        url_writer.writerow(
             [
                 "source",
                 "text",
@@ -133,17 +145,17 @@ def processFile(inputFilename):
                 "url",
             ]
         )
-        urlWriter.writerows(urlOutput)
+        url_writer.writerows(url_output)
 
     # writing user x user csv file
     with open(
-        outputFolder + baseFileName + "user.csv",
+        output_folder + base_file_name + "user.csv",
         "w",
         newline="",
         encoding="utf-8",
-    ) as csvUserFile:
-        userCsvWriter = csv.writer(csvUserFile)
-        userCsvWriter.writerow(
+    ) as csv_user_file:
+        user_csv_writer = csv.writer(csv_user_file)
+        user_csv_writer.writerow(
             [
                 "source",
                 "text",
@@ -158,5 +170,5 @@ def processFile(inputFilename):
                 "user",
             ]
         )
-        userCsvWriter.writerows(userOutput)
-    return total - count, count
+        user_csv_writer.writerows(user_output)
+    return total - count, count, data_count
