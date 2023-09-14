@@ -86,7 +86,7 @@ def process_file(input_file_name):
         print("creating output directory")
         os.makedirs(output_folder)
 
-    print()
+    print("------------------------------------")
     print(
         "writing",
         data_count,
@@ -94,9 +94,9 @@ def process_file(input_file_name):
         count,
         "data points from",
         base_file_name,
-        "to csv.",
+        "to csv",
     )
-    print(total - count, "incomplete data points were not processed")
+    print(total - count, "incomplete data points were not processed in", base_file_name)
     # writing to user x hashtag csv file
     with open(
         output_folder + base_file_name + "hashtag.csv",
