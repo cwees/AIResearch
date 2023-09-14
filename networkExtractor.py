@@ -96,7 +96,7 @@ def process_file(input_file_name):
         base_file_name,
         "to csv.",
     )
-    print()
+    print(total - count, "incomplete data points were not processed")
     # writing to user x hashtag csv file
     with open(
         output_folder + base_file_name + "hashtag.csv",
