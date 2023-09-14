@@ -15,8 +15,16 @@ def main():
         total = total + tot
         missed = miss + missed
         rows = data + rows
+        print("------------------------------------------------")
+
     print("Finished processing all csv files.")
-    print("There were", total, "total data points processed with", rows, "rows of data written")
+    print(
+        "There were",
+        total,
+        "total data points processed with",
+        rows,
+        "rows of data written",
+    )
     print(
         missed,
         "incomplete data points were not processed",
