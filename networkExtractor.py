@@ -4,6 +4,7 @@
 import copy
 import csv
 import os
+import re
 
 
 def process_file(input_file_name):
@@ -39,7 +40,7 @@ def process_file(input_file_name):
             # shared info
             base_list = [
                 row[10],  # from user
-                row[1],  # text
+                clean_text(row[1]),  # text
                 row[2],  # relationship type
                 row[3],  # date
                 row[4],  # time
@@ -173,3 +174,12 @@ def process_file(input_file_name):
         )
         user_csv_writer.writerows(user_output)
     return total - count, count, data_count
+
+
+def clean_text(tweet):
+    tweet = tweet.replace("\n", " ")  # remove newlines
+    tweet = re.sub(
+        r"(@[A-Za-z0–9_]+)|[^\w\s]|#|http\S+", "", tweet
+    )  # remove hashtags and @
+    tweet = re.sub(r"RT", "", tweet)  # remove "RT" from tweet
+    return tweet
