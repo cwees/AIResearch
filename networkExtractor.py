@@ -5,6 +5,7 @@ import copy
 import csv
 import os
 import re
+# from nltk import stopwords
 
 
 def process_file(input_file_name):
@@ -16,6 +17,7 @@ def process_file(input_file_name):
     hashtag_output = []
     url_output = []
     user_output = []
+    base_output = []
 
     # get base file name
     base_file_name = os.path.splitext(input_file_name)[0].split("\\")[-1]
@@ -79,6 +81,10 @@ def process_file(input_file_name):
                     url_list.append(each_url["expanded_url"])
                     url_output.append(url_list)
                     data_count = data_count + 1
+
+            # Base
+            test = copy.deepcopy(base_list)
+            base_output.append(test)
     input_csv.close()
 
     # if output folder does not exist, create it
@@ -173,6 +179,31 @@ def process_file(input_file_name):
             ]
         )
         user_csv_writer.writerows(user_output)
+
+    # write base data
+    with open(
+        output_folder + base_file_name + "processeddata.csv",
+        "w",
+        newline="",
+        encoding="utf-8",
+    ) as csv_base_file:
+        csv_base_file = csv.writer(csv_base_file)
+        csv_base_file.writerow(
+            [
+                "source",
+                "text",
+                "relationship_type",
+                "relation_date",
+                "relation_time",
+                "user_followers_count",
+                "user_following_count",
+                "location",
+                "user_verification",
+                "user_id",
+            ]
+        )
+        csv_base_file.writerows(base_output)
+
     return total - count, count, data_count
 
 
@@ -181,5 +212,5 @@ def clean_text(tweet):
     tweet = re.sub(
         r"(@[A-Za-z0–9_]+)|[^\w\s]|#|http\S+", "", tweet
     )  # remove hashtags and @
-    tweet = re.sub(r"RT", "", tweet)  # remove "RT" from tweet
+    tweet = re.sub(r"RT ", "", tweet)  # remove "RT" from tweet
     return tweet
