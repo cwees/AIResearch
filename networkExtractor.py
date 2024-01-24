@@ -5,6 +5,7 @@ import copy
 import csv
 import os
 import re
+
 # from nltk import stopwords
 
 
@@ -28,16 +29,11 @@ def process_file(input_file_name):
         for row in csv_file_as_list:
             total = total + 1
             # removes incomplete data points
-            if len(row) < 15:
+            if check_none(row):
                 continue
             # removes data without entity dictionary
             if row[5] == "No Entities":
                 continue
-            count = count + 1
-
-            # print every 500 rows
-            if count % 500 == 0:
-                print("Processing " + base_file_name + ".csv, row", count)
 
             # shared info
             base_list = [
@@ -54,10 +50,19 @@ def process_file(input_file_name):
             ]
 
             # strip string of " and convert to dictionary
-            column_data = eval(row[5].strip('"'))
+            column_data = row[5].strip('"')
 
-            # process entities dictionary
+            try:
+                column_data = eval(column_data)
+            except:
+                continue
+            if not isinstance(column_data, dict):
+                continue
+            count = count + 1
+            if count % 500 == 0:
+                print("Processing " + base_file_name + ".csv, row", count)
 
+            # process entities
             # useruser
             if column_data.get("mentions") != None:
                 for each_user in column_data["mentions"]:
@@ -214,3 +219,7 @@ def clean_text(tweet):
     )  # remove hashtags and @
     tweet = re.sub(r"RT ", "", tweet)  # remove "RT" from tweet
     return tweet
+
+
+def check_none(item):
+    return any(elem is None for elem in item)
