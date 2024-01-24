@@ -5,6 +5,7 @@ import copy
 import csv
 import os
 import re
+import demoji
 
 # from nltk import stopwords
 
@@ -35,7 +36,17 @@ def process_file(input_file_name):
             if row[5] == "No Entities":
                 continue
 
-            # shared info
+            # strip string of " and convert to dictionary
+
+            try:
+                column_data = eval(row[5].strip('"'))
+            except:
+                continue
+            if not isinstance(column_data, dict):
+                continue
+            count = count + 1
+            if count % 500 == 0:
+                print("Processing " + base_file_name + ".csv, row", count)
             base_list = [
                 row[10],  # from user
                 clean_text(row[1]),  # text
@@ -48,20 +59,6 @@ def process_file(input_file_name):
                 row[14],  # verification
                 row[0],  # user id
             ]
-
-            # strip string of " and convert to dictionary
-            column_data = row[5].strip('"')
-
-            try:
-                column_data = eval(column_data)
-            except:
-                continue
-            if not isinstance(column_data, dict):
-                continue
-            count = count + 1
-            if count % 500 == 0:
-                print("Processing " + base_file_name + ".csv, row", count)
-
             # process entities
             # useruser
             if column_data.get("mentions") != None:
@@ -218,6 +215,7 @@ def clean_text(tweet):
         r"(@[A-Za-z0–9_]+)|[^\w\s]|#|http\S+", "", tweet
     )  # remove hashtags and @
     tweet = re.sub(r"RT ", "", tweet)  # remove "RT" from tweet
+    tweet = demoji.replace(tweet, "")
     return tweet
 
 
