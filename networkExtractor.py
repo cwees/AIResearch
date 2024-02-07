@@ -7,7 +7,7 @@ import os
 import re
 import demoji
 
-# from nltk import stopwords
+from lingua import LanguageDetectorBuilder, Language
 
 
 def process_file(input_file_name):
@@ -20,6 +20,7 @@ def process_file(input_file_name):
     url_output = []
     user_output = []
     base_output = []
+    detector = LanguageDetectorBuilder.from_all_languages().build()
 
     # get base file name
     base_file_name = os.path.splitext(input_file_name)[0].split("\\")[-1]
@@ -44,21 +45,28 @@ def process_file(input_file_name):
                 continue
             if not isinstance(column_data, dict):
                 continue
+
+            if not (detector.detect_language_of(row[1]) == Language.ENGLISH):
+                continue
+
             count = count + 1
-            if count % 500 == 0:
-                print("Processing " + base_file_name + ".csv, row", count)
-            base_list = [
-                row[10],  # from user
-                clean_text(row[1]),  # text
-                row[2],  # relationship type
-                row[3],  # date
-                row[4],  # time
-                row[11],  # follower count
-                row[12],  # following count
-                row[8],  # location
-                row[14],  # verification
-                row[0],  # user id
-            ]
+            # if count % 500 == 0:
+            #     print("Processing " + base_file_name + ".csv, row", count)
+            try:
+                base_list = [
+                    row[10],  # from user
+                    clean_text(row[1]),  # text
+                    row[2],  # relationship type
+                    row[3],  # date
+                    row[4],  # time
+                    row[11],  # follower count
+                    row[12],  # following count
+                    row[8],  # location
+                    row[14],  # verification
+                    row[0],  # user id
+                ]
+            except:
+                continue
             # process entities
             # useruser
             if column_data.get("mentions") != None:
@@ -95,7 +103,7 @@ def process_file(input_file_name):
         print("creating output directory")
         os.makedirs(output_folder)
 
-    print("------------------------------------")
+    # print("------------------------------------")
 
     print(
         "writing",
@@ -106,7 +114,7 @@ def process_file(input_file_name):
         base_file_name,
         "to csv",
     )
-    print(total - count, "incomplete data points were not processed in", base_file_name)
+    print(total - count, "incomplete or non english data points were not processed in", base_file_name)
     # writing to user x hashtag csv file
     with open(
         output_folder + base_file_name + "hashtag.csv",
