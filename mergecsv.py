@@ -4,11 +4,11 @@ import os
 
 def all():
     stuff = [
-        "all",
         "bard",
         "elevenlabs",
         "copilot",
         "jasper",
+        "all",
         "midjourney",
         "openai",
         "stablediffusion",
@@ -26,10 +26,14 @@ def merge(dir):
         df_temp = pd.read_csv(file_path + file, lineterminator="\n")
         df_append = df_append._append(df_temp, ignore_index=True)
 
-    initial = int(df_append.size/15)
+    initial = int(df_append.size / 15)
     # print(df_append.head)
-    df_append.drop_duplicates(inplace=True, subset=["TEXT"])
-    final = int(df_append.size/15)
+    df_append.drop_duplicates(
+        keep="first",
+        inplace=True,
+        subset=["TEXT"]
+    )
+    final = int(df_append.size / 15)
     df_append.to_csv("input/" + file, index=False)
     print(f"{dir} initial data size: {initial} Final data size: {final}")
 
