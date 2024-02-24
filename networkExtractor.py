@@ -7,8 +7,6 @@ import os
 import re
 import demoji
 
-from lingua import LanguageDetectorBuilder, Language
-
 
 def process_file(input_file_name):
     # initalize counts
@@ -20,7 +18,6 @@ def process_file(input_file_name):
     url_output = []
     user_output = []
     base_output = []
-    detector = LanguageDetectorBuilder.from_all_languages().build()
 
     # get base file name
     base_file_name = os.path.splitext(input_file_name)[0].split("\\")[-1]
@@ -44,9 +41,6 @@ def process_file(input_file_name):
             except:
                 continue
             if not isinstance(column_data, dict):
-                continue
-
-            if not (detector.detect_language_of(row[1]) == Language.ENGLISH):
                 continue
 
             count = count + 1
@@ -114,7 +108,11 @@ def process_file(input_file_name):
         base_file_name,
         "to csv",
     )
-    print(total - count, "incomplete or non english data points were not processed in", base_file_name)
+    print(
+        total - count,
+        "incomplete or non english data points were not processed in",
+        base_file_name,
+    )
     # writing to user x hashtag csv file
     with open(
         output_folder + base_file_name + "hashtag.csv",
@@ -192,7 +190,7 @@ def process_file(input_file_name):
 
     # write base data
     with open(
-        output_folder + base_file_name + "processeddata.csv",
+        "englishdata\\" + base_file_name + "processeddata.csv",
         "w",
         newline="",
         encoding="utf-8",

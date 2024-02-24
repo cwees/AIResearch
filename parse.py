@@ -12,7 +12,7 @@ def main():
 
 def parsetopics(input_file_name):
 
-
+    print(f"parsing {input_file_name} now")
     df = pd.read_csv(input_file_name, lineterminator="\n")
     base_file_name = os.path.splitext(input_file_name)[0].split("\\")[-1]
 
