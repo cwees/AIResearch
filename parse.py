@@ -18,7 +18,7 @@ def parsetopics(input_file_name):
 
     for i in range(df["Topic"].max() + 1):
         new = df.loc[df["Topic"] == i]
-        new.to_csv("topics\\" + base_file_name + str(i) + ".csv", index=False)
+        new.to_csv("topics\\" + base_file_name + str(i+1) + ".csv", index=False)
 
 
 main()

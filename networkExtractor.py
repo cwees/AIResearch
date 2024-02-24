@@ -49,7 +49,7 @@ def process_file(input_file_name):
             try:
                 base_list = [
                     row[10],  # from user
-                    clean_text(row[1]),  # text
+                    row[1],  # text
                     row[2],  # relationship type
                     row[3],  # date
                     row[4],  # time
@@ -87,8 +87,8 @@ def process_file(input_file_name):
                     data_count = data_count + 1
 
             # Base
-            test = copy.deepcopy(base_list)
-            base_output.append(test)
+            # test = copy.deepcopy(base_list)
+            # base_output.append(test)
     input_csv.close()
 
     # if output folder does not exist, create it
@@ -189,40 +189,40 @@ def process_file(input_file_name):
         user_csv_writer.writerows(user_output)
 
     # write base data
-    with open(
-        "englishdata\\" + base_file_name + "processeddata.csv",
-        "w",
-        newline="",
-        encoding="utf-8",
-    ) as csv_base_file:
-        csv_base_file = csv.writer(csv_base_file)
-        csv_base_file.writerow(
-            [
-                "source",
-                "text",
-                "relationship_type",
-                "relation_date",
-                "relation_time",
-                "user_followers_count",
-                "user_following_count",
-                "location",
-                "user_verification",
-                "user_id",
-            ]
-        )
-        csv_base_file.writerows(base_output)
+    # with open(
+    #     "englishdata\\" + base_file_name + "processeddata.csv",
+    #     "w",
+    #     newline="",
+    #     encoding="utf-8",
+    # ) as csv_base_file:
+    #     csv_base_file = csv.writer(csv_base_file)
+    #     csv_base_file.writerow(
+    #         [
+    #             "source",
+    #             "text",
+    #             "relationship_type",
+    #             "relation_date",
+    #             "relation_time",
+    #             "user_followers_count",
+    #             "user_following_count",
+    #             "location",
+    #             "user_verification",
+    #             "user_id",
+    #         ]
+    #     )
+    #     csv_base_file.writerows(base_output)
 
     return total - count, count, data_count
 
 
-def clean_text(tweet):
-    tweet = tweet.replace("\n", " ")  # remove newlines
-    tweet = re.sub(
-        r"(@[A-Za-z0–9_]+)|[^\w\s]|#|http\S+", "", tweet
-    )  # remove hashtags and @
-    tweet = re.sub(r"RT ", "", tweet)  # remove "RT" from tweet
-    tweet = demoji.replace(tweet, "")
-    return tweet
+# def clean_text(tweet):
+#     tweet = tweet.replace("\n", " ")  # remove newlines
+#     tweet = re.sub(
+#         r"(@[A-Za-z0–9_]+)|[^\w\s]|#|http\S+", "", tweet
+#     )  # remove hashtags and @
+#     tweet = re.sub(r"RT ", "", tweet)  # remove "RT" from tweet
+#     tweet = demoji.replace(tweet, "")
+#     return tweet
 
 
 def check_none(item):

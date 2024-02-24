@@ -12,10 +12,11 @@ def main():
         df = pd.read_csv(input + file, lineterminator="\n", low_memory=False)
         df = df.loc[:, ["TEXT"]]
         initial = df.size
-        df.drop_duplicates(keep="first", inplace=True, subset=["TEXT"])
+        df.drop_duplicates(keep="first", inplace=True)
         deduped = df.size
         print(f"{file} before: {initial} deduped: {deduped}")
         df.to_csv("englishdata\\" + file, index=False)
         total+=deduped
+    print()
     print(f"total unique lines: {total}")
 main()

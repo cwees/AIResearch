@@ -15,6 +15,7 @@
 
 import nltk
 import os
+import pandas as pd
 
 # the line below needs to run only once
 nltk.download("vader_lexicon")
@@ -58,7 +59,6 @@ def main():
     # set the file name here
     folder = "topics\\"
     for file in os.listdir("topics"):
-        print(file)
 
         inputfilename = file
         CSVInputFileName = folder + file
@@ -91,7 +91,9 @@ def main():
                 # print()
             # write the list to a CSV file
             write_output_to_CSV(CSVoutputList, inputfilename)
-
-
+        df = pd.DataFrame(CSVoutputList).iloc[:, 1]
+        mean = round(df.mean(),2)
+        std = round(df.std(),2)
+        print(f"{file} mean±std: {mean} ± {std}")
 if __name__ == "__main__":
     main()
