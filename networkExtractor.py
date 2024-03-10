@@ -13,6 +13,10 @@ def process_file(input_file_name):
     count = 0
     total = 0
     data_count = 0
+
+    user_count = 0
+    hashtag_count = 0
+    url_count = 0
     # initialize lists for output to write to csv
     hashtag_output = []
     url_output = []
@@ -69,6 +73,7 @@ def process_file(input_file_name):
                     user_list.append(each_user["username"])
                     user_output.append(user_list)
                     data_count = data_count + 1
+                    user_count += 1
 
             # hashtag
             if column_data.get("hashtags") != None:
@@ -77,6 +82,7 @@ def process_file(input_file_name):
                     hashtag_list.append(each_hashtag["tag"])
                     hashtag_output.append(hashtag_list)
                     data_count = data_count + 1
+                    hashtag_count += 1
 
             # urls
             if column_data.get("urls") != None:
@@ -85,6 +91,7 @@ def process_file(input_file_name):
                     url_list.append(each_url["expanded_url"])
                     url_output.append(url_list)
                     data_count = data_count + 1
+                    url_count += 1
 
             # Base
             # test = copy.deepcopy(base_list)
@@ -100,19 +107,9 @@ def process_file(input_file_name):
     # print("------------------------------------")
 
     print(
-        "writing",
-        data_count,
-        "rows of data from",
-        count,
-        "data points from",
-        base_file_name,
-        "to csv",
+        f"writing {data_count} rows from {count} data points from {base_file_name} to csv"
     )
-    print(
-        total - count,
-        "incomplete or non english data points were not processed in",
-        base_file_name,
-    )
+    print(f"Users: {user_count} Urls: {url_count} Hashtags: {hashtag_count}")
     # writing to user x hashtag csv file
     with open(
         output_folder + base_file_name + "hashtag.csv",
@@ -123,7 +120,7 @@ def process_file(input_file_name):
         hashtag_writer = csv.writer(csv_hashtag_file)
         hashtag_writer.writerow(
             [
-                "source",
+                "Source",
                 "text",
                 "relationship_type",
                 "relation_date",
@@ -133,7 +130,7 @@ def process_file(input_file_name):
                 "location",
                 "user_verification",
                 "user_id",
-                "hashtag",
+                "Target",
             ]
         )
         hashtag_writer.writerows(hashtag_output)
@@ -158,7 +155,7 @@ def process_file(input_file_name):
                 "location",
                 "user_verification",
                 "user_id",
-                "url",
+                "Target",
             ]
         )
         url_writer.writerows(url_output)
@@ -183,36 +180,12 @@ def process_file(input_file_name):
                 "location",
                 "user_verification",
                 "user_id",
-                "user",
+                "Target",
             ]
         )
         user_csv_writer.writerows(user_output)
 
-    # write base data
-    # with open(
-    #     "englishdata\\" + base_file_name + "processeddata.csv",
-    #     "w",
-    #     newline="",
-    #     encoding="utf-8",
-    # ) as csv_base_file:
-    #     csv_base_file = csv.writer(csv_base_file)
-    #     csv_base_file.writerow(
-    #         [
-    #             "source",
-    #             "text",
-    #             "relationship_type",
-    #             "relation_date",
-    #             "relation_time",
-    #             "user_followers_count",
-    #             "user_following_count",
-    #             "location",
-    #             "user_verification",
-    #             "user_id",
-    #         ]
-    #     )
-    #     csv_base_file.writerows(base_output)
-
-    return total - count, count, data_count
+    return total - count, count, data_count, user_count, url_count, hashtag_count
 
 
 # def clean_text(tweet):

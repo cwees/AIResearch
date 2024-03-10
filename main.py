@@ -10,26 +10,24 @@ def main():
     missed = 0
     total = 0
     rows = 0
+    user = 0
+    url = 0
+    hashtag = 0
     for file in os.listdir(input):
-        miss, tot, data = process_file(input + file)
+        miss, tot, data, user_count, url_count, hashtag_count = process_file(
+            input + file
+        )
         total = total + tot
         missed = miss + missed
         rows = data + rows
+        user = user_count + user
+        url = url + url_count
+        hashtag = hashtag_count + hashtag
 
         print("------------------------------------------------")
-
-    print("Finished processing all csv files.")
-    print(
-        "There were",
-        total,
-        "total data points processed with",
-        rows,
-        "rows of data written",
-    )
-    print(
-        missed,
-        "incomplete data points were not processed",
-    )
+    print(f"There were {total} total data points processed with {rows} rows")
+    print(f"TOTAL Users:{user} Urls:{url} Hashtags:{hashtag}")
+    print(f"{missed} incomplete data points were not processed")
 
 
 if __name__ == "__main__":
